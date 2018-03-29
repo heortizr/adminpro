@@ -3,6 +3,7 @@ import { Usuario } from '../../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 
 // import 'rxjs/add/operator/map';
 
@@ -10,11 +11,13 @@ import { Router } from '@angular/router';
 export class UsuarioService {
 
   usuario: Usuario;
+  usuario_id: string;
   token: string;
 
   constructor(
     public http: HttpClient,
-    public router: Router
+    public router: Router,
+    public _subirArchivoService: SubirArchivoService
   ) {
     this.cargarStorage();
   }
@@ -22,6 +25,7 @@ export class UsuarioService {
   logOut() {
 
     this.usuario = null;
+    this.usuario_id = '';
     this.token = '';
 
     localStorage.removeItem('token');
@@ -38,6 +42,7 @@ export class UsuarioService {
     localStorage.setItem('usuario', JSON.stringify(usuario));
 
     this.usuario = usuario;
+    this.usuario_id = id;
     this.token = token;
   }
 
@@ -48,9 +53,11 @@ export class UsuarioService {
   cargarStorage() {
     if ( localStorage.getItem('token') ) {
       this.token = localStorage.getItem('token');
+      this.usuario_id = localStorage.getItem('id');
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
     } else {
       this.token = '';
+      this.usuario_id = '';
       this.usuario = null;
     }
   }
@@ -93,5 +100,36 @@ export class UsuarioService {
       return resp.usuario;
     });
 
+  }
+
+  actualizarUsuario( usuario: Usuario ) {
+
+    let url = URL_SERVICIOS + '/usuario/' + usuario._id;
+    url += '?token=' + this.token;
+
+    return this.http.put( url, usuario )
+    .map( (resp: any) => {
+
+      this.guardarStorage(resp.usuario._id, this.token, resp.usuario);
+
+      swal('Usuario actualizado', usuario.nombre, 'success');
+      return resp.usuario;
+    });
+
+  }
+
+  cambiarImagen( archivo: File, id: string ) {
+
+    this._subirArchivoService.subirArchivo( archivo, 'usuarios', id)
+    .then( (resp: any) => {
+
+      this.usuario.img = resp.usuario.img;
+      swal('Imagen Actualizada', this.usuario.nombre, 'success');
+      this.guardarStorage( id, this.token, this.usuario );
+
+    })
+    .catch(resp => {
+      console.log(resp);
+    });
   }
 }
