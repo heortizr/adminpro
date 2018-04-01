@@ -11,6 +11,7 @@ import {
   HospitalService,
   MedicoService,
   ModalUploadService,
+  AdminGuard,
   UsuarioService
 } from './service.index';
 
@@ -28,6 +29,7 @@ import {
     UsuarioService,
     HospitalService,
     MedicoService,
+    AdminGuard,
     ModalUploadService
   ],
   declarations: []
