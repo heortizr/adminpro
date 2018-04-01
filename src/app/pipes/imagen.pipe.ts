@@ -20,11 +20,11 @@ export class ImagenPipe implements PipeTransform {
 
     switch (tipo) {
       case 'usuario':
-        return url + '/usuarios/' + img;
+        return url + `/usuarios/${img}`;
       case 'medico':
-        return url + '/medicos/' + img;
+        return url + `/medicos/${img}`;
       case 'hospital':
-        return url + '/hospitales/' + img;
+        return url + `/hospitales/${img}`;
       default:
         console.log('imagen no existe, usuarios, medicos, hospitales');
         return url + '/usuarios/xxx';

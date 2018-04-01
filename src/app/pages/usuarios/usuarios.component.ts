@@ -49,14 +49,14 @@ export class UsuariosComponent implements OnInit {
 
   cambiarDesde( valor: number ) {
 
-    const desde = this.desde + valor;
-    console.log(desde);
+    const nuevoDesde = this.desde + valor;
+    console.log(nuevoDesde);
 
-    if ( desde >= this.totalRegistros ) {
+    if ( nuevoDesde >= this.totalRegistros ) {
       return;
     }
 
-    if ( desde < 0 ) {
+    if ( nuevoDesde < 0 ) {
       return;
     }
 
@@ -96,12 +96,10 @@ export class UsuariosComponent implements OnInit {
       text: `Esta a punto de borrar ${usuario.nombre}`,
       icon: 'warning',
       buttons: true,
-      dangerMode: true,
+      dangerMode: true
     })
     .then( (borrar: any) => {
-
       if (borrar) {
-
         this._usuarioService.borrarUsuario( usuario._id )
         .subscribe( (borrado: boolean) => {
           this.cargarUsuarios();
