@@ -1,3 +1,4 @@
+export { VerificaTokenGuard } from './guards/verifica-token.guard';
 export { AdminGuard } from './guards/admin.guard';
 export { ModalUploadService } from '../components/modal-upload/modal-upload.service';
 export { MedicoService } from './medico/medico.service';
